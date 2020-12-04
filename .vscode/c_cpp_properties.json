@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "MinGW",
+            "intelliSenseMode": "${default}",
+            "compilerPath": "D://VS Code/mingw64/bin/gcc.exe",
+            "includePath": [
+                "${workspaceFolder}",
+                "D://VS Code/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/**",
+                "D://VS Code/mingw64/x86_64-w64-mingw32/include/**"
+            ],
+            "defines": [
+                "_DEDBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "D://VS Code/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/**",
+                    "D://VS Code/mingw64/x86_64-w64-mingw32/include/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
