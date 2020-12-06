@@ -2,25 +2,34 @@
  * 使两个集合的元素个数差d<=1
  * 其中一个集合存从小到大的排序，另一个集合从大到小的排序
  * 若n为偶数，则d=0，分别求两集合元素和的差即可
- * 若n为奇数，则d=1，有两种情况，n1更大，或n2更大，最后选取元素和之差最大的情况
+ * 若n为奇数，则d=1，选取元素和之差最大的情况，两种情况的分段前半段取值都为n的一半
  * 考虑到集合元素为正整数，选择基数排序
 */
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #define maxR 10
 using namespace std;
 
 int src[] = {99, 85, 43, 46, 888, 94, 11, 2, 6};
+int sss[] = {0, 51, 56, 33, 84, 89, 12, 23};
+int te[] = {0, 0, 0, 55, 86, 89};
 
 int maxbit(int data[], int n);
 void radixSort(int data[], int n);
 int sum(int data[], int n, int length, bool flag);
-void output(int data[], int n, int length, bool flag);
+void output(int data[], int n, int length);
 void solution(int data[], int n);
 
 int main()
 {
-    solution(src, 9);
+    int length = sizeof(src) / sizeof(src[0]);
+    solution(src, length);
+    cout << "=========================\n";
+    length = sizeof(sss) / sizeof(sss[0]);
+    solution(sss, length);
+    cout << "=========================\n";
+    length = sizeof(te) / sizeof(te[0]);
+    solution(te, length);
     return 0;
 }
 int maxbit(int data[], int n)
@@ -57,7 +66,7 @@ void radixSort(int data[], int n)
         for (int j = 1; j < 10; j++)
             //与前位累加，得到data[j]在temp中的位置
             count[j] += count[j - 1];
-        for (int j = n - 1; j > n; j--)
+        for (int j = n - 1; j >= 0; j--)
         {
             tab = (data[j] / radix) % 10;
             //将data[j]放到temp中相应的位置（由count[j]得到）
@@ -78,58 +87,23 @@ int sum(int data[], int n, int length, bool flag)
         for (int i = 0; i < n; i++)
             sum += data[i];
     else //否则后端/大，相加
-        for (int i = length - 1; i >= n; i++)
+        for (int i = n; i < length; i++)
             sum += data[i];
     return sum;
 }
-void output(int data[], int n, int length, bool flag)
+void output(int data[], int n, int length)
 {
-    if (flag)//flag为true则输出前端
-    { 
-        for(int i=0;i<n;i++)
-            cout << "\t" << data[i];
-        cout << endl;
-    }
-    else
-    {
-        for(int i=n;i<length;i++)
-            cout << "\t" << data[i];
-        cout << endl;
-    }
-    
+    cout << "S1:";
+    for (int i = 0; i < n; i++)
+        cout << "\t" << data[i];
+    cout << endl;
+    cout << "S2:";
+    for (int i = n; i < length; i++)
+        cout << "\t" << data[i];
+    cout << endl;
 }
 void solution(int data[], int n)
 {
-    int n1, n2;
-    int sum1, sum2;
     radixSort(data, n);
-    if (n % 2 == 1)
-    {
-        n1 = n / 2;//第一种情况
-        sum1 = abs(sum(data, n1, n, true) - sum(data, n1, n, false));
-        n2 = n / 2 + 1;//第二种情况
-        sum2 = abs(sum(data, n2, n, true) - sum(data, n2, n, false));
-        if(sum1>sum2)
-        {
-            cout << "S1:\n";
-            output(data, n1, n, true);
-            cout << "S2:\n";
-            output(data, n - n1, n, false);
-        }else
-        {
-            cout << "S1:\n";
-            output(data, n2, n, true);
-            cout << "S2:\n";
-            output(data, n - n2, n, false);
-        }
-        
-    }
-    else
-    {
-        n1 = n2 = n / 2;
-        cout << "S1:\n";
-        output(data, n1, n, true);
-        cout << "S2:\n";
-        output(data, n2, n, false);
-    }
+    output(data, n / 2, n);
 }
