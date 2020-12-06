@@ -6,51 +6,29 @@
  * 考虑到集合元素为正整数，选择基数排序
 */
 #include <iostream>
+#include <cmath>
 #define maxR 10
 using namespace std;
-typedef int keyType;
-typedef struct Node
-{
-    keyType data;
-    struct Node *next;
-} NodeType; //数据的节点类型
 
 int src[] = {99, 85, 43, 46, 888, 94, 11, 2, 6};
 
-NodeType *creatList(keyType data[], int length);
-int maxbit(NodeType *node);
-void radixSort(NodeType *node, int length);
+int maxbit(int data[], int n);
+void radixSort(int data[], int n);
+int sum(int data[], int n, int length, bool flag);
+void output(int data[], int n, int length, bool flag);
+void solution(int data[], int n);
 
 int main()
 {
-
-    NodeType *List = creatList(src, (sizeof(src) / sizeof(src[0])));
+    solution(src, 9);
     return 0;
 }
-
-NodeType *creatList(keyType data[], int length)
+int maxbit(int data[], int n)
 {
-    NodeType *head = new NodeType, *end = head;
-    for (int i = 0; i < length; i++)
-    {
-        NodeType *node = new NodeType;
-        node->data = data[i];
-        end->next = node;
-        end = node;
-    }
-    end->next = NULL;
-    return head;
-}
-int maxbit(NodeType *node)
-{
-    NodeType *temp = node->next;
-    int maxData = temp->data;
-    while (temp != NULL)
-    {
-        if (maxData < temp->data)
-            maxData = temp->data;
-        temp = temp->next;
-    }
+    int maxData = data[0];
+    for (int i = 0; i < n; i++)
+        if (maxData < data[i])
+            maxData = data[i];
     int d = 0;
     while (maxData > 0)
     {
@@ -59,21 +37,99 @@ int maxbit(NodeType *node)
     }
     return d;
 }
-void radixSort(NodeType *node, int length)
+void radixSort(int data[], int n)
 {
-    int d = maxbit(node);
-    keyType *temp = new keyType[length];
+    int d = maxbit(data, n);
+    int *temp = new int[n];
     int *count = new int[10];
     int radix = 1;
+    int tab;
     for (int i = 0; i < d; i++)
     {
         for (int j = 0; j < 10; j++)
             count[j] = 0;
-        for (int j = 0; j < length;j++){
-            
+        for (int j = 0; j < n; j++)
+        {
+            //通过data[j]某位的值，计算在桶中的标签tab
+            tab = (data[j] / radix) % 10;
+            count[tab]++;
         }
-            for (int j = 1; j < 10; j++)
-                count[j] += count[j - 1];
+        for (int j = 1; j < 10; j++)
+            //与前位累加，得到data[j]在temp中的位置
+            count[j] += count[j - 1];
+        for (int j = n - 1; j > n; j--)
+        {
+            tab = (data[j] / radix) % 10;
+            //将data[j]放到temp中相应的位置（由count[j]得到）
+            temp[--count[tab]] = data[j];
+        }
+        for (int j = 0; j < n; j++)
+            //temp成为新的data
+            data[j] = temp[j];
+        radix = radix * 10; //切换数位
+    }
+    delete[] temp;
+    delete[] count;
+}
+int sum(int data[], int n, int length, bool flag)
+{
+    int sum = 0;
+    if (flag) //flag为true则前端/小，相加
+        for (int i = 0; i < n; i++)
+            sum += data[i];
+    else //否则后端/大，相加
+        for (int i = length - 1; i >= n; i++)
+            sum += data[i];
+    return sum;
+}
+void output(int data[], int n, int length, bool flag)
+{
+    if (flag)//flag为true则输出前端
+    { 
+        for(int i=0;i<n;i++)
+            cout << "\t" << data[i];
+        cout << endl;
+    }
+    else
+    {
+        for(int i=n;i<length;i++)
+            cout << "\t" << data[i];
+        cout << endl;
+    }
+    
+}
+void solution(int data[], int n)
+{
+    int n1, n2;
+    int sum1, sum2;
+    radixSort(data, n);
+    if (n % 2 == 1)
+    {
+        n1 = n / 2;//第一种情况
+        sum1 = abs(sum(data, n1, n, true) - sum(data, n1, n, false));
+        n2 = n / 2 + 1;//第二种情况
+        sum2 = abs(sum(data, n2, n, true) - sum(data, n2, n, false));
+        if(sum1>sum2)
+        {
+            cout << "S1:\n";
+            output(data, n1, n, true);
+            cout << "S2:\n";
+            output(data, n - n1, n, false);
+        }else
+        {
+            cout << "S1:\n";
+            output(data, n2, n, true);
+            cout << "S2:\n";
+            output(data, n - n2, n, false);
+        }
         
+    }
+    else
+    {
+        n1 = n2 = n / 2;
+        cout << "S1:\n";
+        output(data, n1, n, true);
+        cout << "S2:\n";
+        output(data, n2, n, false);
     }
 }
