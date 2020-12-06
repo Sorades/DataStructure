@@ -41,3 +41,39 @@ NodeType *creatList(keyType data[], int length)
     end->next = NULL;
     return head;
 }
+int maxbit(NodeType *node)
+{
+    NodeType *temp = node->next;
+    int maxData = temp->data;
+    while (temp != NULL)
+    {
+        if (maxData < temp->data)
+            maxData = temp->data;
+        temp = temp->next;
+    }
+    int d = 0;
+    while (maxData > 0)
+    {
+        maxData /= 10;
+        d++;
+    }
+    return d;
+}
+void radixSort(NodeType *node, int length)
+{
+    int d = maxbit(node);
+    keyType *temp = new keyType[length];
+    int *count = new int[10];
+    int radix = 1;
+    for (int i = 0; i < d; i++)
+    {
+        for (int j = 0; j < 10; j++)
+            count[j] = 0;
+        for (int j = 0; j < length;j++){
+            
+        }
+            for (int j = 1; j < 10; j++)
+                count[j] += count[j - 1];
+        
+    }
+}
