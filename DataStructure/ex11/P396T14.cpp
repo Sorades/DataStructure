@@ -16,14 +16,14 @@ typedef struct Node
 RecType list[n] = {{0, 'A'}, {1, 'B'}, {3, 'C'}, {2, 'E'}, {1, 'D'}, {0, 'F'}};
 
 NodeType *creatList(RecType list[]);
-void radixSort(NodeType *&p, int r, int d);
+void radixSort(NodeType *&p);
 void output(NodeType *node);
 
 int main()
 {
     NodeType *List = creatList(list);
     output(List);
-    radixSort(List, 3, 1);
+    radixSort(List);
     cout << "=============================================\n";
     output(List);
     return 0;
@@ -43,47 +43,44 @@ NodeType *creatList(RecType list[])
     end->next = NULL;
     return head;
 }
-void radixSort(NodeType *&p, int r, int d)
+void radixSort(NodeType *&p)
 {
     NodeType *head[maxSize], *tail[maxSize], *temp;
     NodeType *node = p->next;
     int key;
-    for (int i = 0; i < d; i++)
+    for (int i = 0; i < maxSize; i++)
+        head[i] = tail[i] = NULL;
+    while (node != NULL)
     {
-        for (int j = 0; j < maxSize; j++)
-            head[j] = tail[j] = NULL;
-        while (node != NULL)
+        key = node->data.key;
+        if (head[key] == NULL)
         {
-            key = node->data.key;
-            if (head[key] == NULL)
+            head[key] = node;
+            tail[key] = node;
+        }
+        else
+        {
+            tail[key]->next = node;
+            tail[key] = node;
+        }
+        node = node->next;
+    }
+    node = NULL;
+    for (int i = 0; i < maxSize; i++)
+        if (head[i] != NULL)
+        {
+            if (node == NULL)
             {
-                head[key] = node;
-                tail[key] = node;
+                node = head[i];
+                temp = tail[i];
             }
             else
             {
-                tail[key]->next = node;
-                tail[key] = node;
+                temp->next = head[i];
+                temp = tail[i];
             }
-            node = node->next;
         }
-        node = NULL;
-        for (int j = 0; j < maxSize; j++)
-            if (head[j] != NULL)
-            {
-                if (node == NULL)
-                {
-                    node = head[j];
-                    temp = tail[j];
-                }
-                else
-                {
-                    temp->next = head[j];
-                    temp = tail[j];
-                }
-            }
-        temp->next = NULL;
-    }
+    temp->next = NULL;
 }
 void output(NodeType *node)
 {
