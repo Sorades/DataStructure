@@ -17,8 +17,12 @@ int main()
 {
     int src[] = {99, 85, 43, 46, 888, 94, 11, 2, 6};
     int sss[] = {0, 51, 56, 33, 84, 89, 12, 23};
-    int te[] = {0, 0, 0, 55, 86, 89};
+    int te[] = {111, 86, 85, 0, 0, 0};
     solution(src, sizeof(src) / sizeof(src[0]) - 1);
+    cout << "=========================================\n";
+    solution(sss, sizeof(sss) / sizeof(sss[0]) - 1);
+    cout << "=========================================\n";
+    solution(te, sizeof(te) / sizeof(te[0]) - 1);
     return 0;
 }
 int partition(int rec[], int front, int rear)
@@ -43,7 +47,7 @@ void quickSort(int rec[], int front, int rear, int &pos, int n)
     if (front < rear)
     {
         int i = partition(rec, front, rear);
-        if (i == n / 2)
+        if (i == (n + 1) / 2)
             pos = i;
         quickSort(rec, front, i - 1, pos, n);
         quickSort(rec, i + 1, rear, pos, n);
@@ -58,10 +62,10 @@ void solution(int rec[], int n)
     int pos = -1;
     quickSort(rec, 0, n, pos, n);
     cout << "»®·Öºó£º\n";
-    for (int i = 0; i < n / 2; i++)
+    for (int i = 0; i < (n + 1) / 2; i++)
         cout << rec[i] << " ";
     cout << endl;
-    for (int i = n / 2; i <= n; i++)
+    for (int i = (n + 1) / 2; i <= n; i++)
         cout << rec[i] << " ";
     cout << endl;
 }
