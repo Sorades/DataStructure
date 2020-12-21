@@ -12,7 +12,7 @@ int leafCount(binaryT *btree, int k)
     while (!isEmpty(queue))
     {
         dedQueue(queue, temp);
-        if (levelCount 3333== k)
+        if (levelCount == k)
         {
             while (temp != NULL)
             {
